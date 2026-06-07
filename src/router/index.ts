@@ -1,13 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../stores/auth.store';
 import AuthLayout from '../layouts/AuthLayout.vue';
+import DashboardLayout from '../layouts/DashboardLayout.vue';
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            redirect: '/login',
+            redirect: '/dashboard',
         },
         {
             path: '/',
@@ -30,6 +31,18 @@ const router = createRouter({
                     name: 'ForgotPassword',
                     component: () => import('../pages/auth/ForgotPasswordPage.vue'),
                     meta: { guest: true },
+                },
+            ],
+        },
+        {
+            path: '/',
+            component: DashboardLayout,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: 'dashboard',
+                    name: 'Dashboard',
+                    component: () => import('../pages/dashboard/DashboardPage.vue'),
                 },
             ],
         },
