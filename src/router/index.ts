@@ -44,6 +44,12 @@ const router = createRouter({
                     name: 'Dashboard',
                     component: () => import('../pages/dashboard/DashboardPage.vue'),
                 },
+                {
+                    path: 'users',
+                    name: 'Users',
+                    component: () => import('../pages/users/UserListPage.vue'),
+                    meta: { roles: ['owner'] },
+                },
             ],
         },
     ],
