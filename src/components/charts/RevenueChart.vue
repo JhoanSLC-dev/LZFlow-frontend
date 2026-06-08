@@ -7,7 +7,7 @@
         <div v-if="loading" class="h-64 flex items-center justify-center">
             <div class="flex items-center gap-2 text-dark-500">
                 <div class="w-5 h-5 border-2 border-lz-500/30 border-t-lz-500 rounded-full animate-spin" />
-                <span class="text-sm">Loading...</span>
+                <span class="text-sm">{{ t('common.loading') }}</span>
             </div>
         </div>
         <div v-else class="h-64">
@@ -49,7 +49,7 @@ const chartData = computed(() => ({
     }),
     datasets: [
         {
-            label: 'Revenue',
+            label: t('dashboard.totalRevenue'),
             backgroundColor: 'rgba(139, 92, 246, 0.6)',
             borderColor: 'rgba(139, 92, 246, 0.8)',
             borderWidth: 1,

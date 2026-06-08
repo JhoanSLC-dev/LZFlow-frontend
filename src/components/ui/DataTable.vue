@@ -14,7 +14,7 @@
                         </th>
                         <th v-if="$slots.actions"
                             class="px-6 py-3.5 text-right text-xs font-semibold text-dark-400 uppercase tracking-wider">
-                            Actions
+                            {{ t('common.actions') }}
                         </th>
                     </tr>
                 </thead>
@@ -35,7 +35,7 @@
                         <td :colspan="columns.length + (!!$slots.actions ? 1 : 0)" class="px-6 py-16 text-center">
                             <div class="flex flex-col items-center gap-2">
                                 <span class="text-3xl opacity-30">📭</span>
-                                <p class="text-sm text-dark-500">No data found</p>
+                                <p class="text-sm text-dark-500">{{ t('common.noData') }}</p>
                             </div>
                         </td>
                     </tr>
@@ -50,6 +50,9 @@
 
 <script setup lang="ts">
 import type { PropType } from 'vue';
+import { useLocaleStore } from '../../stores/locale.store';
+
+const { t } = useLocaleStore();
 
 interface Column {
     key: string;

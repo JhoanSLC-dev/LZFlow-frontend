@@ -1,26 +1,26 @@
 <template>
     <div>
         <div class="mb-6">
-            <h1 class="heading">New Sale</h1>
-            <p class="subheading mt-1">Create a new transaction</p>
+            <h1 class="heading">{{ t('sales.new') }}</h1>
+            <p class="subheading mt-1">{{ t('header.newTransaction') }}</p>
         </div>
         <div class="card max-w-3xl">
             <form @submit.prevent="handleSubmit" class="p-6 space-y-6">
-                <FormField name="customerName" label="Customer Name" v-model="form.customerName"
-                    :error="errors.customerName" placeholder="Customer name" />
+                <FormField name="customerName" :label="t('sales.customerName')" v-model="form.customerName"
+                    :error="errors.customerName" :placeholder="t('sales.customerPlaceholder')" />
 
                 <div>
-                    <label class="label">Products</label>
+                    <label class="label">{{ t('sales.products') }}</label>
                     <div v-for="(item, index) in form.items" :key="index"
                         class="flex items-center gap-3 mb-3 p-3 bg-dark-750/50 rounded-xl border border-dark-600/50">
                         <select v-model="item.productId" class="input flex-1" @change="selectProduct(index)">
-                            <option value="">Select product</option>
+                            <option value="">{{ t('sales.selectProduct') }}</option>
                             <option v-for="p in products" :key="p.id" :value="p.id">{{ p.name }} (Stock: {{
                                 p.stockQuantity }}) - ${{ p.salePrice }}</option>
                         </select>
-                        <input type="number" v-model.number="item.quantity" class="input w-24" placeholder="Qty"
+                        <input type="number" v-model.number="item.quantity" class="input w-24" :placeholder="t('sales.qtyCol')"
                             min="1" />
-                        <input type="number" v-model.number="item.unitPrice" class="input w-28" placeholder="Price"
+                        <input type="number" v-model.number="item.unitPrice" class="input w-28" :placeholder="t('sales.unitPriceCol')"
                             step="0.01" />
                         <p class="text-sm font-medium text-dark-200 w-24 text-right">${{ (item.quantity *
                             item.unitPrice).toFixed(2) }}</p>
@@ -28,15 +28,15 @@
                             class="text-red-400 hover:text-red-300 p-1">&times;</button>
                     </div>
                     <button type="button" @click="addItem" class="text-sm text-lz-400 hover:text-lz-300 font-medium">+
-                        Add Item</button>
+                        {{ t('sales.addItem') }}</button>
                     <p v-if="errors.items" class="text-sm text-red-400 mt-1">{{ errors.items }}</p>
                 </div>
 
                 <div class="flex items-center justify-between p-4 bg-dark-750/50 rounded-xl border border-dark-600/50">
                     <div class="space-y-2">
-                        <p class="text-sm text-dark-400">Subtotal: <span class="font-medium text-dark-200">${{
+                        <p class="text-sm text-dark-400">{{ t('sales.subtotal') }} <span class="font-medium text-dark-200">${{
                                 subtotal.toFixed(2) }}</span></p>
-                        <FormField name="tax" label="Tax" type="number" v-model.number="form.tax" class="w-32" />
+                        <FormField name="tax" :label="t('sales.tax')" type="number" v-model.number="form.tax" class="w-32" />
                     </div>
                     <p class="text-xl font-bold text-dark-50">${{ total.toFixed(2) }}</p>
                 </div>
@@ -48,9 +48,9 @@
                             <path class="opacity-75" fill="currentColor"
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                         </svg>
-                        {{ submitting ? 'Creating...' : 'Complete Sale' }}
+                        {{ submitting ? t('sales.creating') : t('sales.completeSale') }}
                     </button>
-                    <router-link to="/sales" class="btn-secondary">Cancel</router-link>
+                    <router-link to="/sales" class="btn-secondary">{{ t('common.cancel') }}</router-link>
                 </div>
                 <p v-if="apiError" class="text-sm text-red-400 bg-red-500/10 rounded-lg p-3 border border-red-500/20">{{
                     apiError }}</p>
@@ -64,7 +64,10 @@ import { ref, reactive, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useSaleStore } from '../../stores/sale.store';
 import { useProductStore } from '../../stores/product.store';
+import { useLocaleStore } from '../../stores/locale.store';
 import FormField from '../../components/ui/FormField.vue';
+
+const { t } = useLocaleStore();
 
 const router = useRouter();
 const saleStore = useSaleStore();
@@ -87,8 +90,8 @@ function selectProduct(index: number) {
 async function handleSubmit() {
     apiError.value = ''; errors.customerName = ''; errors.items = '';
     let hasError = false;
-    if (!form.customerName) { errors.customerName = 'Required'; hasError = true; }
-    if (form.items.length === 0 || form.items.some((i) => !i.productId || i.quantity <= 0)) { errors.items = 'Add at least one valid item'; hasError = true; }
+    if (!form.customerName) { errors.customerName = t('sales.validationRequired'); hasError = true; }
+    if (form.items.length === 0 || form.items.some((i) => !i.productId || i.quantity <= 0)) { errors.items = t('sales.validationItems'); hasError = true; }
     if (hasError) return;
     submitting.value = true;
     try {
@@ -96,7 +99,7 @@ async function handleSubmit() {
         router.push('/sales');
     } catch (err: unknown) {
         const error = err as { response?: { data?: { error?: string } } };
-        apiError.value = error?.response?.data?.error || 'Sale failed';
+        apiError.value = error?.response?.data?.error || t('sales.saleFailed');
     } finally { submitting.value = false; }
 }
 onMounted(() => productStore.fetchAll({ limit: 100 }));

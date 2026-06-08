@@ -2,14 +2,14 @@
     <div>
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="heading">Sales</h1>
-                <p class="subheading mt-1">View all transactions</p>
+                <h1 class="heading">{{ t('sales.title') }}</h1>
+                <p class="subheading mt-1">{{ t('header.viewTransactions') }}</p>
             </div>
             <router-link to="/sales/new" class="btn-primary">
                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
-                New Sale
+                {{ t('sales.new') }}
             </router-link>
         </div>
 
@@ -21,14 +21,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                    <input v-model="filters.customerName" placeholder="Search customer..." class="input pl-10"
+                    <input v-model="filters.customerName" :placeholder="t('sales.searchPlaceholder')" class="input pl-10"
                         @input="debouncedSearch" />
                 </div>
                 <select v-model="filters.status" class="input w-36" @change="fetchSales">
-                    <option value="">All Status</option>
-                    <option value="completed">Completed</option>
-                    <option value="cancelled">Cancelled</option>
-                    <option value="refunded">Refunded</option>
+                    <option value="">{{ t('sales.allStatus') }}</option>
+                    <option value="completed">{{ t('sales.completed') }}</option>
+                    <option value="cancelled">{{ t('sales.cancelled') }}</option>
+                    <option value="refunded">{{ t('sales.refunded') }}</option>
                 </select>
             </div>
         </div>
@@ -48,7 +48,7 @@
             </template>
             <template #actions="{ row }">
                 <router-link :to="`/sales/${row.id}`"
-                    class="text-lz-400 hover:text-lz-300 text-sm font-medium">View</router-link>
+                    class="text-lz-400 hover:text-lz-300 text-sm font-medium">{{ t('sales.view') }}</router-link>
             </template>
             <template #footer>
                 <Pagination v-if="total > 0" :page="page" :total-pages="totalPages" :total="total"
@@ -59,10 +59,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
 import { useSaleStore } from '../../stores/sale.store';
+import { useLocaleStore } from '../../stores/locale.store';
 import DataTable from '../../components/ui/DataTable.vue';
 import Pagination from '../../components/ui/Pagination.vue';
+
+const { t } = useLocaleStore();
 
 const saleStore = useSaleStore();
 const loading = ref(false);
@@ -71,7 +74,7 @@ const limit = 20;
 const total = ref(0);
 const totalPages = ref(0);
 const filters = reactive({ customerName: '', status: '' });
-const columns = [{ key: 'customerName', label: 'Customer' }, { key: 'total', label: 'Total' }, { key: 'status', label: 'Status' }, { key: 'createdAt', label: 'Date' }];
+const columns = computed(() => [{ key: 'customerName', label: t('sales.customer') }, { key: 'total', label: t('sales.total') }, { key: 'status', label: t('sales.status') }, { key: 'createdAt', label: t('sales.date') }]);
 
 let debounceTimer: ReturnType<typeof setTimeout>;
 function debouncedSearch() {

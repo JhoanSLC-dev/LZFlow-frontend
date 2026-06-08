@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="mb-6">
-            <h1 class="heading">Settings</h1>
-            <p class="subheading mt-1">Organization configuration</p>
+            <h1 class="heading">{{ t('sidebar.settings') }}</h1>
+            <p class="subheading mt-1">{{ t('header.orgConfig') }}</p>
         </div>
 
         <div class="card max-w-2xl mb-6">
@@ -12,20 +12,20 @@
                         class="w-8 h-8 rounded-lg bg-gradient-to-br from-lz-500/20 to-lz-700/20 flex items-center justify-center border border-dark-600">
                         <span class="text-sm">🏢</span>
                     </div>
-                    <h3 class="font-semibold text-dark-50">Organization</h3>
+                    <h3 class="font-semibold text-dark-50">{{ t('settings.organization') }}</h3>
                 </div>
             </div>
             <div class="p-6 space-y-4">
                 <div class="flex items-center justify-between p-3 rounded-xl bg-dark-750/50 border border-dark-600/50">
                     <div>
-                        <p class="text-sm text-dark-300 font-medium">Organization ID</p>
+                        <p class="text-sm text-dark-300 font-medium">{{ t('settings.organizationId') }}</p>
                         <p class="text-xs text-dark-500 mt-0.5 font-mono">{{ authStore.user?.organizationId }}</p>
                     </div>
-                    <span class="badge-info">Active</span>
+                    <span class="badge-info">{{ t('settings.active') }}</span>
                 </div>
                 <div class="flex items-center justify-between p-3 rounded-xl bg-dark-750/50 border border-dark-600/50">
                     <div>
-                        <p class="text-sm text-dark-300 font-medium">Your Account</p>
+                        <p class="text-sm text-dark-300 font-medium">{{ t('settings.yourAccount') }}</p>
                         <p class="text-xs text-dark-500 mt-0.5">{{ authStore.user?.name }} · {{ authStore.user?.email }}
                         </p>
                     </div>
@@ -41,18 +41,18 @@
                         class="w-8 h-8 rounded-lg bg-gradient-to-br from-lz-500/20 to-lz-700/20 flex items-center justify-center border border-dark-600">
                         <span class="text-sm">🔌</span>
                     </div>
-                    <h3 class="font-semibold text-dark-50">API Information</h3>
+                    <h3 class="font-semibold text-dark-50">{{ t('settings.apiInformation') }}</h3>
                 </div>
             </div>
             <div class="p-6 space-y-3">
                 <div class="flex items-center gap-3 p-3 rounded-xl bg-dark-750/50 border border-dark-600/50">
-                    <span class="text-xs font-medium text-dark-400 w-24">API Base URL</span>
+                    <span class="text-xs font-medium text-dark-400 w-24">{{ t('settings.apiBaseUrl') }}</span>
                     <code class="text-sm text-lz-400 font-mono flex-1">{{ apiUrl }}</code>
                     <button @click="copyToClipboard"
-                        class="text-dark-400 hover:text-lz-400 text-xs font-medium">Copy</button>
+                        class="text-dark-400 hover:text-lz-400 text-xs font-medium">{{ t('settings.copy') }}</button>
                 </div>
                 <div class="flex items-center gap-3 p-3 rounded-xl bg-dark-750/50 border border-dark-600/50">
-                    <span class="text-xs font-medium text-dark-400 w-24">API Docs</span>
+                    <span class="text-xs font-medium text-dark-400 w-24">{{ t('settings.apiDocs') }}</span>
                     <a :href="apiUrl + '/docs'" target="_blank"
                         class="text-sm text-lz-400 hover:text-lz-300 font-mono flex-1">{{ apiUrl }}/docs</a>
                     <svg class="w-4 h-4 text-dark-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,6 +68,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from '../../stores/auth.store';
+import { useLocaleStore } from '../../stores/locale.store';
+
+const { t } = useLocaleStore();
 
 const authStore = useAuthStore();
 const apiUrl = '/api';

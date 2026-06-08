@@ -8,7 +8,7 @@
         <select v-else-if="type === 'select'" :id="name" :value="modelValue"
             @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)" :disabled="disabled"
             class="input appearance-none" :class="{ 'input-error': error }">
-            <option value="" disabled class="bg-dark-800">Select...</option>
+            <option value="" disabled class="bg-dark-800">{{ t('common.select') }}</option>
             <option v-for="opt in options" :key="opt.value" :value="opt.value" class="bg-dark-800">
                 {{ opt.label }}
             </option>
@@ -21,6 +21,10 @@
 </template>
 
 <script setup lang="ts">
+import { useLocaleStore } from '../../stores/locale.store';
+
+const { t } = useLocaleStore();
+
 interface SelectOption {
     value: string;
     label: string;

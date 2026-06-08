@@ -84,10 +84,10 @@ const localeStore = useLocaleStore();
 
 const langOpen = ref(false);
 
-const languages = [
-    { value: 'en' as const, label: 'English', flag: '🇬🇧' },
-    { value: 'es' as const, label: 'Español', flag: '🇪🇸' },
-];
+const languages = computed(() => [
+    { value: 'en' as const, label: localeStore.t('header.languageEn'), flag: '🇬🇧' },
+    { value: 'es' as const, label: localeStore.t('header.languageEs'), flag: '🇪🇸' },
+]);
 
 const pageInfo = computed(() => {
     const name = route.name as string;

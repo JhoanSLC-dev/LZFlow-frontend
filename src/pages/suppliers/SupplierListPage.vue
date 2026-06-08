@@ -2,14 +2,14 @@
     <div>
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="heading">Suppliers</h1>
-                <p class="subheading mt-1">Manage your supply chain</p>
+                <h1 class="heading">{{ t('suppliers.title') }}</h1>
+                <p class="subheading mt-1">{{ t('header.manageSuppliers') }}</p>
             </div>
             <button @click="openCreate" class="btn-primary">
                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
-                New Supplier
+                {{ t('suppliers.new') }}
             </button>
         </div>
 
@@ -19,47 +19,50 @@
             </template>
             <template #actions="{ row }">
                 <button @click="openEdit(row)"
-                    class="text-lz-400 hover:text-lz-300 text-sm mr-3 font-medium">Edit</button>
+                    class="text-lz-400 hover:text-lz-300 text-sm mr-3 font-medium">{{ t('common.edit') }}</button>
                 <button @click="confirmDelete(row.id as string)"
-                    class="text-red-400 hover:text-red-300 text-sm font-medium">Delete</button>
+                    class="text-red-400 hover:text-red-300 text-sm font-medium">{{ t('common.delete') }}</button>
             </template>
         </DataTable>
 
-        <Modal v-model="showModal" :title="editing ? 'Edit Supplier' : 'New Supplier'">
+        <Modal v-model="showModal" :title="editing ? t('suppliers.editTitle') : t('suppliers.newTitle')">
             <form @submit.prevent="handleSubmit" class="space-y-4">
-                <FormField name="companyName" label="Company Name" v-model="form.companyName"
+                <FormField name="companyName" :label="t('suppliers.formCompanyName')" v-model="form.companyName"
                     :error="errors.companyName" />
-                <FormField name="contactName" label="Contact Name" v-model="form.contactName"
+                <FormField name="contactName" :label="t('suppliers.formContactName')" v-model="form.contactName"
                     :error="errors.contactName" />
-                <FormField name="email" label="Email" type="email" v-model="form.email" :error="errors.email" />
-                <FormField name="phone" label="Phone" v-model="form.phone" :error="errors.phone" />
-                <FormField name="address" label="Address" type="textarea" v-model="form.address" />
+                <FormField name="email" :label="t('suppliers.formEmail')" type="email" v-model="form.email" :error="errors.email" />
+                <FormField name="phone" :label="t('suppliers.formPhone')" v-model="form.phone" :error="errors.phone" />
+                <FormField name="address" :label="t('suppliers.formAddress')" type="textarea" v-model="form.address" />
                 <div class="flex justify-end gap-3">
-                    <button type="button" @click="showModal = false" class="btn-secondary">Cancel</button>
-                    <button type="submit" :disabled="saving" class="btn-primary">{{ saving ? 'Saving...' : 'Save'
+                    <button type="button" @click="showModal = false" class="btn-secondary">{{ t('common.cancel') }}</button>
+                    <button type="submit" :disabled="saving" class="btn-primary">{{ saving ? t('common.saving') : t('common.save')
                         }}</button>
                 </div>
             </form>
             <p v-if="apiError" class="text-sm text-red-400 mt-3 text-center">{{ apiError }}</p>
         </Modal>
 
-        <Modal v-model="showDeleteModal" title="Delete Supplier">
-            <p class="text-dark-400">Are you sure you want to delete this supplier?</p>
+        <Modal v-model="showDeleteModal" :title="t('suppliers.deleteTitle')">
+            <p class="text-dark-400">{{ t('suppliers.deleteConfirm') }}</p>
             <template #actions>
-                <button @click="showDeleteModal = false" class="btn-secondary">Cancel</button>
-                <button @click="deleteSupplier" class="btn-danger">Delete</button>
+                <button @click="showDeleteModal = false" class="btn-secondary">{{ t('common.cancel') }}</button>
+                <button @click="deleteSupplier" class="btn-danger">{{ t('common.delete') }}</button>
             </template>
         </Modal>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
 import { useSupplierStore } from '../../stores/supplier.store';
+import { useLocaleStore } from '../../stores/locale.store';
 import DataTable from '../../components/ui/DataTable.vue';
 import Modal from '../../components/ui/Modal.vue';
 import FormField from '../../components/ui/FormField.vue';
 import type { Supplier } from '../../types';
+
+const { t } = useLocaleStore();
 
 const supplierStore = useSupplierStore();
 const showModal = ref(false);
@@ -70,10 +73,10 @@ const apiError = ref('');
 const deleteTarget = ref('');
 const form = reactive({ companyName: '', contactName: '', email: '', phone: '', address: '' });
 const errors = reactive({ companyName: '', contactName: '', email: '', phone: '', address: '' });
-const columns = [
-    { key: 'companyName', label: 'Company' }, { key: 'contactName', label: 'Contact' },
-    { key: 'email', label: 'Email' }, { key: 'phone', label: 'Phone' },
-];
+const columns = computed(() => [
+    { key: 'companyName', label: t('suppliers.company') }, { key: 'contactName', label: t('suppliers.contact') },
+    { key: 'email', label: t('suppliers.formEmail') }, { key: 'phone', label: t('suppliers.formPhone') },
+]);
 
 function openCreate() { editing.value = null; form.companyName = ''; form.contactName = ''; form.email = ''; form.phone = ''; form.address = ''; showModal.value = true; }
 function openEdit(supplier: unknown) {
@@ -83,10 +86,10 @@ function openEdit(supplier: unknown) {
 async function handleSubmit() {
     apiError.value = ''; Object.keys(errors).forEach((k) => (errors[k as keyof typeof errors] = ''));
     let hasError = false;
-    if (!form.companyName) { errors.companyName = 'Required'; hasError = true; }
-    if (!form.contactName) { errors.contactName = 'Required'; hasError = true; }
-    if (!form.email) { errors.email = 'Required'; hasError = true; }
-    if (!form.phone) { errors.phone = 'Required'; hasError = true; }
+    if (!form.companyName) { errors.companyName = t('suppliers.validationRequired'); hasError = true; }
+    if (!form.contactName) { errors.contactName = t('suppliers.validationRequired'); hasError = true; }
+    if (!form.email) { errors.email = t('suppliers.validationRequired'); hasError = true; }
+    if (!form.phone) { errors.phone = t('suppliers.validationRequired'); hasError = true; }
     if (hasError) return;
     saving.value = true;
     try {
@@ -94,7 +97,7 @@ async function handleSubmit() {
         if (editing.value) { await supplierStore.update(editing.value.id, payload); }
         else { await supplierStore.create(payload); }
         showModal.value = false;
-    } catch (err: unknown) { const error = err as { response?: { data?: { error?: string } } }; apiError.value = error?.response?.data?.error || 'Save failed'; }
+    } catch (err: unknown) { const error = err as { response?: { data?: { error?: string } } }; apiError.value = error?.response?.data?.error || t('common.saveFailed'); }
     finally { saving.value = false; }
 }
 function confirmDelete(id: string) { deleteTarget.value = id; showDeleteModal.value = true; }

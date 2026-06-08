@@ -11,13 +11,17 @@ export const useLocaleStore = defineStore('locale', () => {
         document.documentElement.lang = l;
     }
 
-    function t(key: string): string {
+    function t(key: string, params?: Record<string, string | number>): string {
         const keys = key.split('.');
         let value: any = messages[locale.value];
         for (const k of keys) {
             value = value?.[k];
         }
-        return value ?? key;
+        if (typeof value !== 'string') return key;
+        if (params) {
+            return value.replace(/\{(\w+)\}/g, (_, k) => String(params[k] ?? `{${k}}`));
+        }
+        return value;
     }
 
     document.documentElement.lang = locale.value;
