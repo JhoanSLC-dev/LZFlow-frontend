@@ -80,6 +80,7 @@ const localeStore = useLocaleStore();
 
 const menuItems = computed(() => [
     { path: '/dashboard', label: localeStore.t('sidebar.dashboard'), icon: '📊', roles: undefined },
+    { path: '/categories', label: localeStore.t('sidebar.categories'), icon: '🏷️', roles: undefined },
     { path: '/users', label: localeStore.t('sidebar.users'), icon: '👥', roles: ['owner'] },
 ]);
 
