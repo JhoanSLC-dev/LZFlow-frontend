@@ -82,6 +82,7 @@ const menuItems = computed(() => [
     { path: '/dashboard', label: localeStore.t('sidebar.dashboard'), icon: '📊', roles: undefined },
     { path: '/products', label: localeStore.t('sidebar.products'), icon: '📦', roles: undefined },
     { path: '/suppliers', label: localeStore.t('sidebar.suppliers'), icon: '🚚', roles: undefined },
+    { path: '/sales', label: localeStore.t('sidebar.sales'), icon: '💰', roles: undefined },
     { path: '/categories', label: localeStore.t('sidebar.categories'), icon: '🏷️', roles: undefined },
     { path: '/users', label: localeStore.t('sidebar.users'), icon: '👥', roles: ['owner'] },
 ]);

@@ -111,3 +111,28 @@ export interface PaginatedResponse<T> {
         hasPrev: boolean;
     };
 }
+
+export interface SaleItem {
+    id: string;
+    saleId: string;
+    productId: string;
+    quantity: number;
+    unitPrice: string;
+    subtotal: string;
+    product?: Product;
+}
+
+export interface Sale {
+    id: string;
+    organizationId: string;
+    customerName: string;
+    subtotal: string;
+    tax: string;
+    total: string;
+    status: 'completed' | 'cancelled' | 'refunded';
+    createdById: string;
+    createdBy?: User;
+    items: SaleItem[];
+    createdAt: string;
+    updatedAt: string;
+}

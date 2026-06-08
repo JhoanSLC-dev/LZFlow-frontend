@@ -70,6 +70,21 @@ const router = createRouter({
                     component: () => import('../pages/suppliers/SupplierListPage.vue'),
                 },
                 {
+                    path: 'sales',
+                    name: 'Sales',
+                    component: () => import('../pages/sales/SaleListPage.vue'),
+                },
+                {
+                    path: 'sales/new',
+                    name: 'SaleCreate',
+                    component: () => import('../pages/sales/SaleFormPage.vue'),
+                },
+                {
+                    path: 'sales/:id',
+                    name: 'SaleDetail',
+                    component: () => import('../pages/sales/SaleDetailPage.vue'),
+                },
+                {
                     path: 'users',
                     name: 'Users',
                     component: () => import('../pages/users/UserListPage.vue'),
