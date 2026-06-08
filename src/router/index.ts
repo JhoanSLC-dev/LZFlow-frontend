@@ -90,6 +90,11 @@ const router = createRouter({
                     component: () => import('../pages/users/UserListPage.vue'),
                     meta: { roles: ['owner'] },
                 },
+                {
+                    path: 'settings',
+                    name: 'Settings',
+                    component: () => import('../pages/settings/SettingsPage.vue'),
+                },
             ],
         },
     ],
