@@ -24,7 +24,7 @@
                 <div
                     class="w-8 h-8 rounded-full bg-gradient-to-br from-lz-500/30 to-lz-700/30 flex items-center justify-center border border-dark-600">
                     <span class="text-xs font-medium text-dark-300">{{ authStore.user?.name?.charAt(0)?.toUpperCase()
-                    }}</span>
+                        }}</span>
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-medium text-dark-200 truncate">{{ authStore.user?.name }}</p>
@@ -80,6 +80,7 @@ const localeStore = useLocaleStore();
 
 const menuItems = computed(() => [
     { path: '/dashboard', label: localeStore.t('sidebar.dashboard'), icon: '📊', roles: undefined },
+    { path: '/products', label: localeStore.t('sidebar.products'), icon: '📦', roles: undefined },
     { path: '/categories', label: localeStore.t('sidebar.categories'), icon: '🏷️', roles: undefined },
     { path: '/users', label: localeStore.t('sidebar.users'), icon: '👥', roles: ['owner'] },
 ]);

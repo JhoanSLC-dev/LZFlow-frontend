@@ -45,6 +45,21 @@ const router = createRouter({
                     component: () => import('../pages/dashboard/DashboardPage.vue'),
                 },
                 {
+                    path: 'products',
+                    name: 'Products',
+                    component: () => import('../pages/products/ProductListPage.vue'),
+                },
+                {
+                    path: 'products/new',
+                    name: 'ProductCreate',
+                    component: () => import('../pages/products/ProductFormPage.vue'),
+                },
+                {
+                    path: 'products/:id/edit',
+                    name: 'ProductEdit',
+                    component: () => import('../pages/products/ProductFormPage.vue'),
+                },
+                {
                     path: 'categories',
                     name: 'Categories',
                     component: () => import('../pages/categories/CategoryListPage.vue'),
