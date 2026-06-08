@@ -65,6 +65,11 @@ const router = createRouter({
                     component: () => import('../pages/categories/CategoryListPage.vue'),
                 },
                 {
+                    path: 'suppliers',
+                    name: 'Suppliers',
+                    component: () => import('../pages/suppliers/SupplierListPage.vue'),
+                },
+                {
                     path: 'users',
                     name: 'Users',
                     component: () => import('../pages/users/UserListPage.vue'),
